@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "newVMName": {
+      "type": "string",
+      "defaultValue": "app-tomcat"
+    },
+    "labName": {
+      "type": "string",
+      "defaultValue": "appd"
+    },
+    "size": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v3"
+    },
+    "userName": {
+      "type": "string",
+      "defaultValue": "tomcat"
+    },
+    "sshKey": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+    "labSubnetName": "[concat(variables('labVirtualNetworkName'), 'Subnet')]",
+    "labVirtualNetworkId": "[resourceId('Microsoft.DevTestLab/labs/virtualnetworks', parameters('labName'), variables('labVirtualNetworkName'))]",
+    "labVirtualNetworkName": "[concat('Dtl', parameters('labName'))]",
+    "vmId": "[resourceId ('Microsoft.DevTestLab/labs/virtualmachines', parameters('labName'), parameters('newVMName'))]",
+    "vmName": "[concat(parameters('labName'), '/', parameters('newVMName'))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2017-04-26-preview",
+      "type": "Microsoft.DevTestLab/labs/virtualmachines",
+      "name": "[variables('vmName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "labVirtualNetworkId": "[variables('labVirtualNetworkId')]",
+        "notes": "Tomcat Certified by Bitnami",
+        "galleryImageReference": {
+          "offer": "tom-cat",
+          "publisher": "bitnami",
+          "sku": "7-0",
+          "osType": "Linux",
+          "version": "latest"
+        },
+        "planId": "7-0",
+        "size": "[parameters('size')]",
+        "userName": "[parameters('userName')]",
+        "sshKey": "[parameters('sshKey')]",
+        "isAuthenticationWithSshKey": true,
+        "labSubnetName": "[variables('labSubnetName')]",
+        "disallowPublicIpAddress": false,
+        "storageType": "Premium",
+        "allowClaim": false
+      }
+    }
+  ],
+  "outputs": {
+    "labVMId": {
+      "type": "string",
+      "value": "[variables('vmId')]"
+    }
+  }
+}
