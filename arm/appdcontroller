@@ -4,15 +4,15 @@
   "parameters": {
     "newVMName": {
       "type": "string",
-      "defaultValue": "appdcontroller"
+      "defaultValue": "appd"
     },
     "labName": {
       "type": "string",
-      "defaultValue": "AppD_UA_Lab"
+      "defaultValue": "appd"
     },
     "size": {
       "type": "string",
-      "defaultValue": "Standard_D2s_v3"
+      "defaultValue": "Standard_E4s_v3"
     },
     "userName": {
       "type": "string",
@@ -20,6 +20,30 @@
     },
     "sshKey": {
       "type": "securestring"
+    },
+    "Apt-Get_packages": {
+      "type": "string",
+      "defaultValue": "libaio1"
+    },
+    "Apt-Get_update": {
+      "type": "string",
+      "defaultValue": "true"
+    },
+    "Apt-Get_options": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "Apt-Get1_packages": {
+      "type": "string",
+      "defaultValue": "numactl"
+    },
+    "Apt-Get1_update": {
+      "type": "string",
+      "defaultValue": "true"
+    },
+    "Apt-Get1_options": {
+      "type": "string",
+      "defaultValue": ""
     }
   },
   "variables": {
@@ -49,6 +73,42 @@
         "userName": "[parameters('userName')]",
         "sshKey": "[parameters('sshKey')]",
         "isAuthenticationWithSshKey": true,
+        "artifacts": [
+          {
+            "artifactId": "[resourceId('Microsoft.DevTestLab/labs/artifactSources/artifacts', parameters('labName'), 'public repo', 'linux-apt-package')]",
+            "parameters": [
+              {
+                "name": "packages",
+                "value": "[parameters('Apt-Get_packages')]"
+              },
+              {
+                "name": "update",
+                "value": "[parameters('Apt-Get_update')]"
+              },
+              {
+                "name": "options",
+                "value": "[parameters('Apt-Get_options')]"
+              }
+            ]
+          },
+          {
+            "artifactId": "[resourceId('Microsoft.DevTestLab/labs/artifactSources/artifacts', parameters('labName'), 'public repo', 'linux-apt-package')]",
+            "parameters": [
+              {
+                "name": "packages",
+                "value": "[parameters('Apt-Get1_packages')]"
+              },
+              {
+                "name": "update",
+                "value": "[parameters('Apt-Get1_update')]"
+              },
+              {
+                "name": "options",
+                "value": "[parameters('Apt-Get1_options')]"
+              }
+            ]
+          }
+        ],
         "labSubnetName": "[variables('labSubnetName')]",
         "disallowPublicIpAddress": false,
         "storageType": "Premium",
