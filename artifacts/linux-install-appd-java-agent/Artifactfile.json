@@ -1,0 +1,7 @@
+        "port": {
+            "type": "string",
+            "displayName": "Controller Port",
+            "defaultValue": "8090",
+            "allowEmpty": false,
+            "description": "The port that the controller listens on."
+        },
