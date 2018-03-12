@@ -1,3 +1,22 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/azure-devtestlab/master/schemas/2016-11-28/dtlArtifacts.json",
+    "title": "Install AppD Java Agent",
+    "description": "Install Install the AppD Java Agent with parameters.",
+    "tags": [
+        "AppD",
+        "Agent",
+        "Java",
+        "Linux"
+    ],
+    "iconUri": "https://www.debian.org/favicon.ico",
+    "targetOsType": "Linux",
+    "parameters": {
+        "controller": {
+            "type": "string",
+            "displayName": "Controller Host",
+            "allowEmpty": false,
+            "description": "The fqdn or ip address of the controller host machine."
+        },
         "port": {
             "type": "string",
             "displayName": "Controller Port",
@@ -5,3 +24,32 @@
             "allowEmpty": false,
             "description": "The port that the controller listens on."
         },
+        "application": {
+            "type": "string",
+            "displayName": "Application Name",
+            "allowEmpty": true,
+            "description": "The name of the Application within AppD that this agent will become part of."
+        }
+        "tier": {
+            "type": "string",
+            "displayName": "Tier Name",
+            "allowEmpty": true,
+            "description": "The name of the Tier within AppD that this agent will become part of."
+        }
+        "account_name": {
+            "type": "string",
+            "displayName": "Account Name",
+            "allowEmpty": true,
+            "description": "The Account to use for connecting to a controller, usually Customer1 for an on-premesis controller."
+        }
+        "account_access_key": {
+            "type": "string",
+            "displayName": "Account Access Key",
+            "allowEmpty": true,
+            "description": "The key used to securely identify with the controller, found under your License screen in the Controller UI."
+        }
+    },
+    "runCommand": {
+        "commandToExecute": "[concat('bash linux-apt-package.sh ', ' --update ', parameters('update'), ' --packages ', parameters('packages'), ' --options ', parameters('options'))]"
+    }
+}
